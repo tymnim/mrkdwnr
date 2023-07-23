@@ -1,0 +1,20 @@
+{
+  "name": "mrkdwnr",
+  "version": "1.0.0",
+  "description": "A tool to preview markdown live",
+  "bin": {
+    "mrkdwnr": "main.mjs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tymnim/mrkdwnr.git"
+  },
+  "author": "Tim Nimets <tim@nimets.dev> (https://tim.nimets.dev/)",
+  "license": "MIT",
+  "dependencies": {
+    "showdown": "^2.1.0"
+  }
+}
