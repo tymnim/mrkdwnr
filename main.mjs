@@ -4,7 +4,7 @@ import { getConfig } from "./config.mjs";
 import { server } from "./server.mjs";
 import { fileReader } from "./fileReader.mjs";
 import { parse } from "./markdownParser.mjs";
-import { readFileSync } from "node:fs";
+import { readFileSync, createReadStream } from "node:fs";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -48,9 +48,16 @@ else {
 config.port = config.port || Math.floor(Math.random() * 50000 + 3000);
 
 server(config.port, (req, res) => {
-  res.setHeader("Content-Type", "text/html");
-  res.writeHead(200);
-  res.end(html);
+  if (req.url === "/") {
+    res.setHeader("Content-Type", "text/html");
+    res.writeHead(200);
+    res.end(html);
+    return;
+  }
+
+  const fileStream = createReadStream(`.${req.url}`);
+  fileStream.on("open", () => fileStream.pipe(res));
+  fileStream.on("error", (err) => { console.error(err); res.writeHead(404); res.end(); });
 }).then((...args) => {
   console.log(`\nLintening on http://localhost:${config.port}`);
 }).catch(console.error);
