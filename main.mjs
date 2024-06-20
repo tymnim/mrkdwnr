@@ -4,10 +4,9 @@ import { getConfig } from "./config.mjs";
 import { server } from "./server.mjs";
 import { fileReader } from "./fileReader.mjs";
 import { parse } from "./markdownParser.mjs";
-import { readFileSync, createReadStream } from "node:fs";
+import { existsSync, readFileSync, createReadStream } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { callbackify } from "node:util";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -29,21 +28,39 @@ const template = [`<!DOCTYPE html>
 function assignHtml(body) {
   html = template.join(body);
 }
+if (config.help) {
+  console.info(`
+mrkdwnr [-v | --version]  [-h | --help] [-w | --watch] [-t | --time <time>]
+        [-p | --port <port>] <file>`.trim());
+  process.exit(0);
+}
 
-if (config.watch) {
-  fileReader(config.input, parseInt(config.time), (err, markdown) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
+if (config.version) {
+  const json = JSON.parse(readFileSync("./package.json"));
+  console.info(`mrkdwnr version: ${json.version}`);
+  process.exit(0);
+}
 
-    assignHtml(parse(markdown));
-  });
+if (existsSync(config.input)) {
+  if (config.watch) {
+    fileReader(config.input, config.time, (err, markdown) => {
+      if (err) {
+        console.error(err);
+        return;
+      }
+
+      assignHtml(parse(markdown));
+    });
+  }
+  else {
+    fileReader(config.input)
+      .then(parse)
+      .then(assignHtml);
+  }
 }
 else {
-  fileReader(config.input)
-    .then(parse)
-    .then(assignHtml);
+  console.error(`Cannot find ${config.input}. Type -h / --help for additional info`);
+  process.exit(1);
 }
 
 config.port = config.port || Math.floor(Math.random() * 50000 + 3000);

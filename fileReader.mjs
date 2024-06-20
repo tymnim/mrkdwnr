@@ -2,7 +2,7 @@ import { watchFile, readFile } from "node:fs";
 
 export function fileReader(path, time = 2000, callback) {
   if (callback) {
-    watchFile(path, { interval: time }, () => {
+    watchFile(path, { interval: parseInt(time) }, () => {
       readFile(path, { encoding: "utf8" }, callback);
     });
     readFile(path, { encoding: "utf8" }, callback);

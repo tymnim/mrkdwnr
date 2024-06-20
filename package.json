@@ -1,6 +1,6 @@
 {
   "name": "mrkdwnr",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "A tool to preview markdown live",
   "bin": {
     "mrkdwnr": "main.mjs"
