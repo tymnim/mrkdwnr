@@ -5,8 +5,8 @@ import { server } from "./server.mjs";
 import { fileReader } from "./fileReader.mjs";
 import { parse } from "./markdownParser.mjs";
 import { readFileSync, createReadStream } from "node:fs";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,7 +23,7 @@ const template = [`<!DOCTYPE html>
     <title>Document</title>
     <style>${css}</style>
   </head>
-  <body>`, `</body>`];
+  <body>`, "</body>"];
 
 function assignHtml(body) {
   html = template.join(body);
@@ -57,7 +57,11 @@ server(config.port, (req, res) => {
 
   const fileStream = createReadStream(`.${req.url}`);
   fileStream.on("open", () => fileStream.pipe(res));
-  fileStream.on("error", (err) => { console.error(err); res.writeHead(404); res.end(); });
+  fileStream.on("error", (err) => {
+    console.error(err);
+    res.writeHead(404);
+    res.end();
+  });
 }).then((...args) => {
   console.log(`\nLintening on http://localhost:${config.port}`);
 }).catch(console.error);

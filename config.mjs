@@ -17,7 +17,7 @@ export function getConfig(args = process.argv.slice(2)) {
         const value = args[i];
         params[param] = value;
       }
-    })
+    });
   }
 
   return params;

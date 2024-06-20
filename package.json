@@ -6,7 +6,9 @@
     "mrkdwnr": "main.mjs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prepare": "npm run eslint",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "eslint": "node_modules/eslint/bin/eslint.js **/*.mjs",
   },
   "repository": {
     "type": "git",
@@ -14,6 +16,10 @@
   },
   "author": "Tim Nimets <tim@nimets.dev> (https://tim.nimets.dev/)",
   "license": "MIT",
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "1.6.0",
+    "eslint": "8.56.0",
+  },
   "dependencies": {
     "showdown": "^2.1.0"
   }
