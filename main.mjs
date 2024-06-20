@@ -5,8 +5,9 @@ import { server } from "./server.mjs";
 import { fileReader } from "./fileReader.mjs";
 import { parse } from "./markdownParser.mjs";
 import { readFileSync, createReadStream } from "node:fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { callbackify } from "node:util";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,7 +31,7 @@ function assignHtml(body) {
 }
 
 if (config.watch) {
-  fileReader(config.input, (err, markdown) => {
+  fileReader(config.input, parseInt(config.time), (err, markdown) => {
     if (err) {
       console.error(err);
       return;
@@ -57,7 +58,7 @@ server(config.port, (req, res) => {
 
   const fileStream = createReadStream(`.${req.url}`);
   fileStream.on("open", () => fileStream.pipe(res));
-  fileStream.on("error", (err) => {
+  fileStream.on("error", err => {
     console.error(err);
     res.writeHead(404);
     res.end();

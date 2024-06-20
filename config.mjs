@@ -1,7 +1,8 @@
 const ARGS_MAP = {
   "input": ["-i", "--input"],
   "watch": ["-w", "--watch"],
-  "port": ["-p", "--port"]
+  "port": ["-p", "--port"],
+  "time": ["-t", "--time"]
 };
 
 export function getConfig(args = process.argv.slice(2)) {

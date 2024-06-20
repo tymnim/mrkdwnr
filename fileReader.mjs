@@ -1,8 +1,8 @@
 import { watchFile, readFile } from "node:fs";
 
-export function fileReader(path, callback) {
+export function fileReader(path, time = 2000, callback) {
   if (callback) {
-    watchFile(path, { interval: 2000 }, () => {
+    watchFile(path, { interval: time }, () => {
       readFile(path, { encoding: "utf8" }, callback);
     });
     readFile(path, { encoding: "utf8" }, callback);
